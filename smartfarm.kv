@@ -1,0 +1,337 @@
+#:import dp kivy.metrics.dp
+
+<CircleToggleButton@ToggleButton>:
+    size_hint: None, None
+    size: dp(92), dp(92)
+    background_normal: ''
+    background_color: (1, 1, 1, 1) if self.state == 'normal' else (0.3, 0.7, 0.3, 1)
+    border: (0, 0, 0, 0)
+    canvas.before:
+        Color:
+            rgba: (1, 1, 1, 1) if self.state == 'normal' else (0.2, 0.5, 0.2, 1)
+        Ellipse:
+            pos: self.pos
+            size: self.size
+    canvas.after:
+        Color:
+            rgba: (0, 0, 0, 0.1)
+        Line:
+            circle: (self.center_x, self.center_y, self.width / 2)
+            width: 1.5
+    BoxLayout:
+        orientation: 'vertical'
+        size: root.size
+        pos: root.pos
+        padding: dp(10), dp(5)
+        spacing: dp(5)
+        Image:
+            source: root.icon_source
+            allow_stretch: True
+            keep_ratio: True
+        Label:
+            text: root.text
+            font_size: '14sp'
+            size_hint_y: None
+            height: self.texture_size[1]
+            halign: 'center'
+            valign: 'middle'
+            text_size: self.width, None
+            # Reference the ToggleButton parent's state for color00:41 12-09-2025
+            color: (0, 0, 0, 1) if root.state == 'normal' else (1, 1, 1, 1)
+
+<HomeScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(30)
+        spacing: dp(40)
+        canvas.before:
+            Color:
+                rgba: 0.95, 0.99, 0.96, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Label:
+            text: 'Welcome to SmartFarm!'
+            font_size: '36sp'
+            color: 0.15, 0.5, 0.15, 1
+            size_hint_y: None
+            height: self.texture_size[1] + dp(10)
+            halign: 'center'
+            valign: 'middle'
+            text_size: self.width, None
+        Label:
+            text: 'Crop disease detection, weather forecasts, and farming tips at your fingertips.'
+            font_size: '20sp'
+            color: 0.1, 0.4, 0.1, 1
+            size_hint_y: None
+            halign: 'center'
+            valign: 'middle'
+            text_size: self.width - dp(40), None
+            height: self.texture_size[1] * 2 + dp(12)
+        Widget:
+            size_hint_y: 1
+        Button:
+            text: 'Get Started'
+            size_hint_y: None
+            height: dp(56)
+            background_color: 0.18, 0.62, 0.18, 1
+            color: 1, 1, 1, 1
+            font_size: '20sp'
+            canvas.before:
+                Color:
+                    rgba: 0.18, 0.62, 0.18, 1
+                RoundedRectangle:
+                    radius: [24]
+                    pos: self.pos
+                    size: self.size
+            on_release: app.goto('crop_select')
+
+<CropSelectScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(16)
+        spacing: dp(16)
+        canvas.before:
+            Color:
+                rgba: 0.98, 0.99, 0.97, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Label:
+            text: 'Select your crops (max 8)'
+            font_size: '22sp'
+            size_hint_y: None
+            height: self.texture_size[1]
+            color: 0.1, 0.4, 0.1, 1
+        ScrollView:
+            GridLayout:
+                id: crop_grid
+                cols: 3
+                padding: dp(10)
+                spacing: dp(14)
+                size_hint_y: None
+                height: self.minimum_height
+        BoxLayout:
+            size_hint_y: None
+            height: dp(56)
+            spacing: dp(12)
+            Button:
+                text: 'Skip'
+                background_color: 0.8, 0.8, 0.8, 1
+                font_size: '18sp'
+                canvas.before:
+                    Color:
+                        rgba: 0.8, 0.8, 0.8, 1
+                    RoundedRectangle:
+                        radius: [24]
+                        pos: self.pos
+                        size: self.size
+                on_release: app.goto('dashboard')
+            Button:
+                id: btn_next
+                text: 'Next'
+                disabled: True
+                background_color: 0.3, 0.7, 0.3, 1
+                font_size: '18sp'
+                canvas.before:
+                    Color:
+                        rgba: 0.3, 0.7, 0.3, 1
+                    RoundedRectangle:
+                        radius: [24]
+                        pos: self.pos
+                        size: self.size
+                on_release: app.goto('dashboard')
+
+<DashboardScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(20)
+        canvas.before:
+            Color:
+                rgba: 0.98, 0.99, 0.97, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: None
+            height: dp(110)
+            padding: dp(10)
+            spacing: dp(8)
+            canvas.before:
+                Color:
+                    rgba: 1, 1, 1, 1
+                RoundedRectangle:
+                    radius: [24]
+                    pos: self.pos
+                    size: self.size
+            Image:
+                source: 'assets/appicon.png' 
+                size_hint_y: None
+                height: dp(56)
+                allow_stretch: True
+                keep_ratio: True
+            Label:
+                text: 'Today, 12 Sept'
+                color: 0.1, 0.3, 0.1, 1
+                font_size: '18sp'
+                size_hint_y: None
+                height: dp(24)
+            Label:
+                text: 'Clear · 24°C / 20°C'
+                color: 0.15, 0.35, 0.15, 1
+                font_size: '16sp'
+            Button:
+                text: 'Allow Location'
+                size_hint_y: None
+                height: dp(32)
+                font_size: '15sp'
+                color: 0.3, 0.25, 0.15, 1
+                background_color: 0.8, 0.93, 0.78, 0
+
+                canvas.before:
+                    Color:
+                        rgba: 0.8, 0.93, 0.78, 0
+                    RoundedRectangle:
+                        radius: [16]
+                        pos: self.pos
+                        size: self.size
+                on_release: app.request_location_permission()
+
+        Label:
+            text: 'Heal your crop'
+            font_size: '24sp'
+            color: 0.15, 0.4, 0.15, 1
+            size_hint_y: None
+            height: self.texture_size[1]
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(100)
+            spacing: dp(16)
+            canvas.before:
+                Color:
+                    rgba: 1, 1, 1, 1
+                RoundedRectangle:
+                    radius: [20]
+                    pos: self.pos
+                    size: self.size
+            BoxLayout:
+                orientation: 'vertical'
+                padding: dp(8)
+                size_hint_x: 0.3
+                Image:
+                    source: 'assets/leaf.png'
+                    allow_stretch: True
+                    keep_ratio: True
+                Label:
+                    text: 'Take a picture'
+                    halign: 'center'
+                    color: 0.1, 0.4, 0.1, 1
+                    font_size: '14sp'
+            BoxLayout:
+                orientation: 'vertical'
+                padding: dp(8)
+                size_hint_x: 0.3
+                Image:
+                    source: 'assets/diagnosis_icon.png'
+                    allow_stretch: True
+                    keep_ratio: True
+                Label:
+                    text: 'See diagnosis'
+                    halign: 'center'
+                    color: 0.1, 0.4, 0.1, 1
+                    font_size: '14sp'
+            BoxLayout:
+                orientation: 'vertical'
+                padding: dp(8)
+                size_hint_x: 0.3
+                Image:
+                    source: 'assets/medicine_icon.png'
+                    allow_stretch: True
+                    keep_ratio: True
+                Label:
+                    text: 'Get medicine'
+                    halign: 'center'
+                    color: 0.1, 0.4, 0.1, 1
+                    font_size: '14sp'
+
+        Button:
+            text: 'Take a picture'
+            size_hint_y: None
+            height: dp(56)
+            font_size: '20sp'
+            background_color: 0.15, 0.45, 0.18, 1
+            color: 1, 1, 1, 1
+            canvas.before:
+                Color:
+                    rgba: 0.15, 0.45, 0.18, 1
+                RoundedRectangle:
+                    radius: [24]
+                    pos: self.pos
+                    size: self.size
+            on_release: app.take_photo()
+
+        Button:
+            text: "Select Image from Files"
+            size_hint_y: None
+            height: dp(50)
+            font_size: '18sp'
+            background_color: 0.4, 0.4, 0.4, 1
+            color: 1, 1, 1, 1
+            canvas.before:
+                Color:
+                    rgba: 0.4, 0.4, 0.4, 1
+                RoundedRectangle:
+                    radius: [24]
+                    pos: self.pos
+                    size: self.size
+            on_release: root.open_native_file_explorer()
+
+<DiagnosisScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(20)
+        canvas.before:
+            Color:
+                rgba: 0.88, 1, 0.88, 1  # light green background
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Image:
+            id: plant_image_display
+            size_hint_y: 0.5
+            allow_stretch: True
+            keep_ratio: True
+            source: ''
+        Label:
+            id: disease_name_label
+            text: 'Disease:'
+            font_name: app.current_font
+            font_size: '22sp'
+            color: 0, 0.3, 0, 1  # dark green text
+            halign: 'left'
+            valign: 'middle'
+            text_size: self.width, None
+            size_hint_y: None
+            height: self.texture_size[1]
+        Label:
+            id: treatment_label
+            text: 'Treatment:'
+            font_name: app.current_font
+            font_size: '18sp'
+            color: 0, 0.25, 0, 1  # slightly lighter dark green
+            halign: 'left'
+            valign: 'middle'
+            text_size: self.width, None
+            size_hint_y: None
+            height: self.texture_size[1]
+        Widget:
+        Button:
+            text: 'Back Home'
+            size_hint_y: None
+            height: dp(50)
+            on_release: app.goto('home')
